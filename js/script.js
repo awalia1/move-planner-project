@@ -20,7 +20,23 @@ function loadData() {
 	var streetviewUrl = 'https://maps.googleapis.com/maps/api/streetview?size=600x400&location=' + address + '';
 	$body.append('<img class="bgimg" src="' + streetviewUrl + '">');
 	
-	return false;
+	var nytimesUrl = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + cityStr + '&sort=newest&api-key=2dccec083de347e8a09ff059b0cfd1a4'
+	$.getJSON(nytimesUrl, function(data){
+		
+		$nytHeaderElem.text('New York Times Articles About ' + cityStr); 
+		
+		articles = data.response.docs;
+		for (var i = 0; i < articles.length; i++) {
+			var article = articles [i];
+			$nytElem.append('<li class="article">' + 
+				'<a href="'+article.web_url+'">' +article.headline.main+ '</a>'+ 
+				'<p>' + article.snippet + '</p>'+ 
+			'</li>');
+		};
+	})
+	
+		return false;
 };
 
+	
 $('#form-container').submit(loadData);
